@@ -24,7 +24,21 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-
+// timestamp microsservice
+app.get('/api/:time', (req, res) => {
+    let time = req.params.time;
+  
+    if(/\d{5,}/g.test(time)) {
+      res.json({"unix": time, "utc": new Date(parseInt(time)).toUTCString()});
+    } else {
+      let date = new Date(req.params.time);
+      if(date.toString == 'Invalid Date') {
+        res.json({error: 'Invalid Date'})
+      } else {
+      res.json({"unix": date.getTime(), "utc": date.toUTCString()})
+      };
+    }
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
