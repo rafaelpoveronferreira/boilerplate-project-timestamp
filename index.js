@@ -25,17 +25,25 @@ app.get("/api/hello", function (req, res) {
 });
 
 // timestamp microsservice
-app.get('/api/:time', (req, res) => {
-    let time = req.params.time;
+app.get('/api', (req, res) => {
+      let date = new Date();
+      res.json({ unix: date.getTime(), utc: date.toUTCString() 
+    })
+});
+
+app.get('/api/:date', (req, res) => {
+    let time = req.params.date;
   
     if(/\d{5,}/g.test(time)) {
-      res.json({"unix": time, "utc": new Date(parseInt(time)).toUTCString()});
+      res.json({ unix: parseInt(time), utc: new Date(parseInt(time)).toUTCString() });
     } else {
-      let date = new Date(req.params.time);
-      if(date.toString == 'Invalid Date') {
-        res.json({error: 'Invalid Date'})
+      let date = new Date(req.params.date);
+
+      console.log(date.toString())
+      if(date.toString() == "Invalid Date") {
+        res.json({ error: "Invalid Date" })
       } else {
-      res.json({"unix": date.getTime(), "utc": date.toUTCString()})
+      res.json({ unix: date.getTime(), utc: date.toUTCString() })
       };
     }
 });
